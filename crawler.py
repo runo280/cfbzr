@@ -32,13 +32,15 @@ def parse(cat, url):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0'
     }
     main_page = requests.get(url, headers=headers)
-    parsed = BeautifulSoup(main_page.content, 'html.parser')
-    list_container = parsed.find_all('div', class_='list-container__items')
-    links = list_container[0].find_all('a')
-    for link in links:
-        app_url = 'https://cafebazaar.ir' + link['href']
-        if not is_app_in_db(app_url):
-            add_app_to_db(cat, app_url)
+    if main_page.ok:
+        parsed = BeautifulSoup(main_page.content, 'html.parser')
+        list_container = parsed.find_all('div', class_='list-container__items')
+        if len(list_container) > 0:
+            links = list_container[0].find_all('a')
+            for link in links:
+                app_url = 'https://cafebazaar.ir' + link['href']
+                if not is_app_in_db(app_url):
+                    add_app_to_db(cat, app_url)
 
 
 def add_app_to_db(cat, link, is_pub=False):
