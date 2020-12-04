@@ -60,4 +60,4 @@ def is_app_in_db(url):
 for cat, url in pages.items():
     print(url)
     parse(cat, url)
-    time.sleep(10)
+    time.sleep(45)
